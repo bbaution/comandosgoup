@@ -19,7 +19,7 @@ const InfoCard = ({ image, title, text, delay = 0.2 }) => {
       initial="initial"
       whileInView="animate"
       viewport={{ once: true, amount: 0.2 }}
-      className="relative w-[80%] h-96 rounded-xl overflow-hidden shadow-lg cursor-pointer mx-auto my-5"
+      className="relative w-full h-96 rounded-xl overflow-hidden shadow-lg cursor-pointer my-5"
       onClick={() => setOpen(!open)}
     >
       {/* Imagen */}

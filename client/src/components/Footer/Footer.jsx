@@ -33,7 +33,7 @@ const importantLinks = [
 
 const Footer = () => {
   return (
-    <div className="text-white rounded-t-3xl  bg-[#1b1b1a] ">
+    <div className="text-white   bg-[#1b1b1a] ">
       <div className="mx-auto max-w-[1200px] p-4">
         {/* footer containt section  */}
         <div className="grid py-5 md:grid-cols-3">

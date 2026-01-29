@@ -1,39 +1,45 @@
-import React from "react";
-// import Image2 from "../../assets/blogs/blog4.jpeg";
-import Image from "../../assets/image2.jpeg";
+import { IoLogoInstagram } from "react-icons/io";
+import { motion } from "framer-motion";
 
-const Banner2 = () => {
+const Banner2 = ({
+  id,
+  title,
+  bullets = [],
+  image,
+  
+}) => {
   return (
-    <div className="bg-slate-100 dark:bg-slate-900 dark:text-white">
-      <div className="container md:h-[500px] flex items-center justify-center py-10">
+    <div
+      id={id}
+      className="bg-slate-100 dark:bg-slate-900 dark:text-white"
+    >
+      <div className="container flex items-center justify-center py-16">
         <div className="grid grid-cols-1 items-center gap-4 sm:grid-cols-2">
+          
           {/* text container */}
-          <div className="lg:max-w-[400px] space-y-6">
+          <div className="lg:max-w-[400px] space-y-6 px-4">
             <h1 className="text-2xl font-semibold md:text-4xl mb-4">
-              Help the Needy People
+              {title}
             </h1>
-            <ul className="flex list-inside list-disc flex-col gap-2 md:gap-4">
-              <li className="font-medium">
-                Always give without remembering and always receive without
-                forgetting
-              </li>
-              <li className="font-medium">
-                Giving does not only precede receiving; it is the reason for it.
-              </li>
-              <li className="font-medium">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              </li>
+
+            <ul className="space-y-4 text-sm md:text-base">
+              {bullets.map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
             </ul>
-            <button className="btn-primary">Get Started</button>
+
+            
           </div>
+
           {/* img container */}
           <div>
             <img
-              src={Image}
-              alt=""
-              className="mx-auto w-full p-4 md:max-w-full h-[300px] md:h-[350px] object-cover rounded-3xl"
+              src={image}
+              alt={title}
+              className="mx-auto w-[500px] p-4 md:max-w-full h-[300px] md:h-[350px] object-cover rounded-3xl"
             />
           </div>
+
         </div>
       </div>
     </div>

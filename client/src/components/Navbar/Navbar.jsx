@@ -1,19 +1,20 @@
-import { useState, useEffect } from "react";
-import { FaCaretDown } from "react-icons/fa";
-
+import { useEffect, useState } from "react";
 import { HiMenuAlt1, HiMenuAlt3 } from "react-icons/hi";
 import ResponsiveMenu from "./ResponsiveMenu";
 import iconoFondoAzul from "../../assets/iconoSinFondo.png";
+import { Link, useLocation } from "react-router-dom";
+
 const Navbar = () => {
-  const [theme, ] = useState(
+  const [theme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
   const [showMenu, setShowMenu] = useState(false);
+
   const element = document.documentElement;
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
+  const openMenu = () => setShowMenu(true);
+  const closeMenu = () => setShowMenu(false);
+  const toggleMenu = () => setShowMenu((prev) => !prev);
 
   useEffect(() => {
     if (theme === "dark") {
@@ -23,70 +24,89 @@ const Navbar = () => {
       element.classList.remove("dark");
       localStorage.setItem("theme", "light");
     }
-  }, );
+  }, [theme]);
+
+  // Bloquear scroll cuando el menú mobile está abierto
+  useEffect(() => {
+    document.body.style.overflow = showMenu ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showMenu]);
+
+  // Items (ajustá anchors si tus secciones tienen otros ids)
+  const menuItems = [
+    { label: "Inicio", to: "/" },
+    { label: "Tu empresa", to: "/tu-empresa" }, // 👈 nueva vista
+  ];
+
   return (
     <>
       <nav className="md:static fixed top-0 left-0 w-full z-50 bg-[#111110] text-white">
         <div className="container">
           <div className="flex items-center justify-between h-[70px] py-2">
-            {/* Logo section */}
-            <div className="w-[60px]">
-              <a href="#">
+            {/* Logo */}
+            <div className="flex items-center gap-3">
+              <a href="#inicio" className="w-[60px]">
                 <img src={iconoFondoAzul} alt="icono" />
               </a>
             </div>
-            {/* Desktop Menu section */}
-            <div className="hidden md:block">
-              <ul className="flex items-center gap-10">
-                <li className="group relative cursor-pointer">
-                  <a href="#" className="flex items-center gap-[2px] h-[72px]">
-                    Home{" "}
-                    <span>
-                      <FaCaretDown className="group-hover:rotate-180 transition-all duration-200" />
-                    </span>
-                  </a>
-                  {/* dropdown section */}
-                  <div className="absolute -left-9 z-[99999] hidden w-[150px] bg-white shadow-md p-2 text-black rounded-md group-hover:block">
-                    <ul className="space-y-3">
-                    <li className="p-2 hover:bg-[#0a88b68e]">
-                      <a href="#nosotros">Nosotros</a>
-                    </li>
-                    <li className="p-2 hover:bg-[#0a88b68e]">
-                      <a href="#testimonios">Nuestra filosofía</a>
-                    </li>
-                    <li className="p-2 hover:bg-[#0a88b68e]">
-                      <a href="#servicios">Nuestros Servicios</a>
-                    </li>
-                    <li className="p-2 hover:bg-[#0a88b68e]">
-                      <a href="#porqueelegirnos">¿Por qué elegirnos?</a>
-                    </li>
-                  </ul>
-                  </div>
-                </li>
+
+            {/* Desktop menu */}
+            <div className="hidden md:flex items-center gap-10">
+              <ul className="flex items-center gap-8">
+                {menuItems.map((item) => (
+                  <li key={item.label}>
+                    {item.to ? (
+                      <Link
+                        to={item.to}
+                        className="text-sm font-semibold tracking-wide hover:text-[#0a88b6] transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={item.hash}
+                        className="text-sm font-semibold tracking-wide hover:text-[#0a88b6] transition-colors"
+                      >
+                        {item.label}
+                      </a>
+                    )}
+                  </li>
+                ))}
               </ul>
+
+
             </div>
-            {/* Mobile Menu section */}
+
+            {/* Mobile button */}
             <div className="md:hidden flex items-center gap-4">
-              
               {showMenu ? (
                 <HiMenuAlt1
                   onClick={toggleMenu}
                   className="cursor-pointer transition-all"
                   size={30}
+                  aria-label="Cerrar menú"
                 />
               ) : (
                 <HiMenuAlt3
-                  onClick={toggleMenu}
+                  onClick={openMenu}
                   className="cursor-pointer transition-all"
                   size={30}
+                  aria-label="Abrir menú"
                 />
               )}
             </div>
           </div>
         </div>
       </nav>
-      {/* Mobile side Menu components */}
-      <ResponsiveMenu showMenu={showMenu} />
+
+      {/* Mobile drawer */}
+      <ResponsiveMenu
+        showMenu={showMenu}
+        onClose={closeMenu}
+        items={menuItems}
+      />
     </>
   );
 };
